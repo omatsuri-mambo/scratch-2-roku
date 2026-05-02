@@ -1,0 +1,190 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Scratch to Roku Converter</title>
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <div class="app-shell">
+      <header class="topbar">
+        <div class="brand">
+          <div class="brand-mark" aria-hidden="true">
+            <span></span>
+            <span></span>
+          </div>
+          <div>
+            <h1>Scratch to Roku Converter</h1>
+            <p>Turn Scratch projects into a native Roku channel starter.</p>
+          </div>
+        </div>
+        <div class="top-actions">
+          <button class="icon-button" id="sampleButton" type="button" title="Load demo project" aria-label="Load demo project">
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M4 4h12l4 4v12H4z"></path>
+              <path d="M15 4v5h5"></path>
+              <path d="M8 14h8"></path>
+              <path d="M8 17h5"></path>
+            </svg>
+          </button>
+          <button class="primary-button" id="downloadButton" type="button" disabled>
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M12 3v12"></path>
+              <path d="m7 10 5 5 5-5"></path>
+              <path d="M5 21h14"></path>
+            </svg>
+            Download Roku ZIP
+          </button>
+        </div>
+      </header>
+
+      <main class="workspace">
+        <section class="converter-panel">
+          <div class="drop-zone" id="dropZone">
+            <input id="fileInput" type="file" accept=".sb3,.json,application/json" />
+            <div class="drop-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24">
+                <path d="M12 3v12"></path>
+                <path d="m7 8 5-5 5 5"></path>
+                <path d="M5 21h14"></path>
+                <path d="M7 17h10"></path>
+              </svg>
+            </div>
+            <h2>Drop a Scratch .sb3 file here</h2>
+            <p>or choose a .json project export for a quick conversion pass.</p>
+            <button class="secondary-button" id="chooseButton" type="button">Choose File</button>
+          </div>
+
+          <div class="summary-grid">
+            <article>
+              <span id="targetCount">0</span>
+              <p>targets</p>
+            </article>
+            <article>
+              <span id="assetCount">0</span>
+              <p>assets copied</p>
+            </article>
+            <article>
+              <span id="scriptCount">0</span>
+              <p>scripts found</p>
+            </article>
+            <article>
+              <span id="unsupportedCount">0</span>
+              <p>unsupported items</p>
+            </article>
+          </div>
+
+          <section class="preview-panel" aria-labelledby="previewTitle">
+            <div class="section-heading">
+              <div>
+                <h2 id="previewTitle">Project Preview</h2>
+                <p id="projectStatus">No project loaded yet.</p>
+              </div>
+              <div class="status-pill" id="qualityPill">Waiting</div>
+            </div>
+            <div class="stage-preview" id="stagePreview">
+              <div class="empty-state">
+                <svg viewBox="0 0 24 24" aria-hidden="true">
+                  <path d="M4 5h16v14H4z"></path>
+                  <path d="m4 15 4-4 3 3 4-5 5 6"></path>
+                </svg>
+                <p>Load a project to see the generated Roku scene layout.</p>
+              </div>
+            </div>
+          </section>
+
+          <section class="mapping-panel" aria-labelledby="mappingTitle">
+            <div class="section-heading">
+              <div>
+                <h2 id="mappingTitle">Keyboard to Roku Remote</h2>
+                <p>Pick how Scratch keyboard events should feel on a Roku remote before export.</p>
+              </div>
+              <button class="secondary-button" id="resetMappingButton" type="button">Reset</button>
+            </div>
+            <div class="remote-layout">
+              <div class="mapping-grid" id="mappingGrid"></div>
+              <figure class="remote-preview">
+                <img src="https://image.roku.com/ZHZscHItMTc2/WMT-Roku-RSS-Remote-black-button-v2.png" alt="Roku remote with black buttons" />
+                <figcaption>Use the picture to avoid awkward button choices.</figcaption>
+              </figure>
+            </div>
+          </section>
+
+          <section class="output-panel" aria-labelledby="outputTitle">
+            <div class="section-heading">
+              <div>
+                <h2 id="outputTitle">Generated Files</h2>
+                <p>Native Roku files are created in memory for download.</p>
+              </div>
+              <div class="tabs" role="tablist" aria-label="Generated files">
+                <button class="tab active" data-file="manifest" type="button">manifest</button>
+                <button class="tab" data-file="source/main.brs" type="button">main.brs</button>
+                <button class="tab" data-file="components/MainScene.xml" type="button">Scene.xml</button>
+                <button class="tab" data-file="components/MainScene.brs" type="button">Scene.brs</button>
+                <button class="tab" data-file="source/ScratchLogic.brs" type="button">Logic.brs</button>
+                <button class="tab" data-file="source/RemoteInputMap.brs" type="button">Remote.brs</button>
+              </div>
+            </div>
+            <pre id="codeOutput"><code>Generated Roku source will appear here.</code></pre>
+          </section>
+
+          <section class="tutorial-panel" aria-labelledby="tutorialTitle">
+            <div class="section-heading">
+              <div>
+                <h2 id="tutorialTitle">Perfect Roku App Tutorial</h2>
+                <p>A practical checklist for building Scratch projects that convert cleanly.</p>
+              </div>
+            </div>
+            <div class="tutorial-steps">
+              <article>
+                <span>1</span>
+                <h3>Name a manifest sprite</h3>
+                <p>Create a sprite named <strong>rokusmanifest</strong>, add one Scratch comment/note inside it, and write Roku manifest lines like <code>title=My Game</code>.</p>
+              </article>
+              <article>
+                <span>2</span>
+                <h3>Design for the remote</h3>
+                <p>Use arrows, select, back, replay, and a few letter keys. The Play/Pause button is reserved for Scratch start/stop.</p>
+              </article>
+              <article>
+                <span>3</span>
+                <h3>Keep assets Roku-friendly</h3>
+                <p>Use simple costumes and short sounds. SVG costumes are converted to PNG during export, but camera/video sensing, pen drawings, and clone-heavy effects still need manual work.</p>
+              </article>
+              <article>
+                <span>4</span>
+                <h3>Ship in layers</h3>
+                <p>First convert the stage and sprites, then wire the generated BrightScript notes into real SceneGraph behavior one Scratch feature at a time.</p>
+              </article>
+            </div>
+          </section>
+        </section>
+
+        <aside class="unsupported-panel" aria-labelledby="unsupportedTitle">
+          <div class="side-heading">
+            <h2 id="unsupportedTitle">Can't Convert</h2>
+            <p>Scratch blocks and features that need manual Roku work.</p>
+          </div>
+
+          <div class="filter-row">
+            <button class="filter active" data-filter="all" type="button">All</button>
+            <button class="filter" data-filter="block" type="button">Blocks</button>
+            <button class="filter" data-filter="feature" type="button">Features</button>
+          </div>
+
+          <div class="unsupported-list" id="unsupportedList">
+            <div class="empty-side">
+              <svg viewBox="0 0 24 24" aria-hidden="true">
+                <path d="M20 6 9 17l-5-5"></path>
+              </svg>
+              <p>Nothing to report until a project is loaded.</p>
+            </div>
+          </div>
+        </aside>
+      </main>
+    </div>
+
+    <script src="./app.js"></script>
+  </body>
+</html>
