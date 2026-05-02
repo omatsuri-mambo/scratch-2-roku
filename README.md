@@ -2,13 +2,6 @@
 
 A dependency-free browser tool for turning Scratch `.sb3` projects into a native Roku SceneGraph starter package.
 
-Open `index.html` directly, or serve the folder locally:
-
-```powershell
-python -m http.server 4173 --bind 127.0.0.1
-```
-
-Then visit `http://127.0.0.1:4173/`.
 
 ## What It Does
 
