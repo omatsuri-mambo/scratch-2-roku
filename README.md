@@ -53,3 +53,9 @@ mm_icon_focus_hd=pkg:/assets/roku-thumbnail.png
 ```
 
 The `rokuthumbnail` helper sprite is not placed on the generated Roku stage.
+
+## Credits
+
+rokucommunity: making BrighterScript and Bslint
+
+omatsuri-mambo: Making Sb3-2-Roku
